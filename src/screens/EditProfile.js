@@ -53,7 +53,7 @@ class EditProfile extends Component {
                 <TextInput style={style.textInput} placeholder="banisholih23@gmail.com" />
               </View>
             </View>
-            <TouchableOpacity onPress={this.submit} style={style.button}>
+            <TouchableOpacity style={style.button}>
               <Text style={style.buttonText}>SUBMIT</Text>
             </TouchableOpacity>
             <View style={{...{marginTop: 15}}}>

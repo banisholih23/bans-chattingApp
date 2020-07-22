@@ -32,7 +32,7 @@ class Register extends Component {
           <View style={loginStyle.container}>
             {/* <Image source={librarylogo} style={loginStyle.image} /> */}
             <Text style={loginStyle.text}>Ban's-Chat</Text>
-            <Text style={loginStyle.text2}>Please Login</Text>
+            <Text style={loginStyle.text2}>Please Register</Text>
           </View>
         </View>
         <View style={loginStyle.form}>
@@ -60,7 +60,7 @@ class Register extends Component {
             <TouchableOpacity
               onPress={this.login}
               style={loginStyle.submitRegist}>
-              <Text style={loginStyle.textRegister}>Don't Have Account ? Please Register</Text>
+              <Text style={loginStyle.textRegister}>Your Already Have Account ? Please Login</Text>
             </TouchableOpacity>
           </View>
         </View>
