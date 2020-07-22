@@ -1,31 +1,30 @@
-import React, {Component} from 'react'
-import {Text, TextInput, View, Image, StatusBar, StyleSheet, Dimensions, TouchableOpacity, Alert, KeyboardAvoidingView} from 'react-native';
+import React, { useState } from 'react'
+import { Text, TextInput, View, Image, StatusBar, StyleSheet, Dimensions, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
 import bg from '../assets/images/bg.jpg'
+
+import { useNavigation } from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-class Login extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: '',
-      password: ''
+const Login = () => {
+
+  const navigation = useNavigation();
+  const [email, changeEmail] = useState('');
+  const [password, changePassword] = useState('');
+
+  const onLogin = async () => {
+    try {
+      await auth().signInWithEmailAndPassword(email, password);
+      Alert.alert('Holaaa!! Login Success')
+    } catch (e) {
+      Alert.alert(e.code);
     }
-  }
-
-  register = () => {
-    this.props.navigation.navigate('register')
-  }
-
-  login = () => {
-    this.props.navigation.navigate('mainmenu')
-  }
-
-  render() {
-    return (
-      <>  
-       <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
+  };
+  return (
+    <>
+      <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
         <StatusBar backgroundColor='#222423' />
         <Image source={bg} style={loginStyle.accent1} />
         <View style={loginStyle.accent2}>
@@ -39,9 +38,10 @@ class Login extends Component {
           <View style={loginStyle.formCard}>
             <View>
               {/* <Image source={email} style={loginStyle.imageUser} /> */}
-              <TextInput placeholder="Email" style={loginStyle.inputStyle} />
+              <TextInput onChangeText={changeEmail} placeholder="Email" style={loginStyle.inputStyle} />
               {/* <Image source={pass} style={loginStyle.imagePass} /> */}
               <TextInput
+                onChangeText={changePassword}
                 secureTextEntry={true}
                 placeholder="Password"
                 style={loginStyle.inputStyle}
@@ -50,7 +50,7 @@ class Login extends Component {
           </View>
           <View style={loginStyle.link}>
             <TouchableOpacity
-              onPress={this.login}
+              onPress={onLogin}
               style={loginStyle.submit}>
               <Text style={loginStyle.submitText}>Login</Text>
             </TouchableOpacity>
@@ -58,16 +58,15 @@ class Login extends Component {
           </View>
           <View style={loginStyle.container2}>
             <TouchableOpacity
-              onPress={this.register}
+              onPress={() => navigation.navigate('register')}
               style={loginStyle.submitRegist}>
               <Text style={loginStyle.textRegister}>Don't Have Account ? Please Register</Text>
             </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView>
-      </>
-    )
-  }
+    </>
+  )
 }
 
 export default Login

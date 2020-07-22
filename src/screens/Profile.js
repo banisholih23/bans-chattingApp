@@ -12,48 +12,51 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import auth from '@react-native-firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-class Profile extends Component {
-  editProfile = () => {
-    this.props.navigation.navigate('editProfile');
-  };
+const Profile = () => {
+  const navigation = useNavigation();
+  const user = auth().currentUser;
 
-  logout = () => {
-    this.props.navigation.navigate('login');
+  const onLogout = async () => {
+    try {
+      await auth().signOut();
+    } catch (e) {
+      Alert.alert(e.code);
+    }
   };
-
-  render() {
-    return (
-      <>
-        <View style={style.content}>
-          <View style={{ ...{ flex: 1 } }}>
-            <View style={style.profile}>
-              <Text style={style.header}>Profile</Text>
-              <View style={style.contentProfile}>
-                <View style={style.imageWrapper}>
-                  <Image style={style.image} />
-                </View>
-                <View style={style.textProfile}>
-                  <Text style={style.name}>Bani Sholih</Text>
-                  <Text style={style.phone}>082112720993</Text>
-                </View>
+  return (
+    <>
+      <View style={style.content}>
+        <View style={{ ...{ flex: 1 } }}>
+          <View style={style.profile}>
+            <Text style={style.header}>Profile</Text>
+            <View style={style.contentProfile}>
+              <View style={style.imageWrapper}>
+                <Image style={style.image} />
+              </View>
+              <View style={style.textProfile}>
+                <Text style={style.name}>{user.email}</Text>
+                <Text style={style.phone}>082112720993</Text>
               </View>
             </View>
-            <View style={style.contentBadge}>
-              <View style={style.account}>
-                <Text style={style.textBadge}>Account</Text>
-                <TouchableOpacity
-                  onPress={this.editProfile}
-                  style={style.list}>
-                  <Icon name="user-edit" size={22} />
-                  <Text style={style.title}>Edit Profile</Text>
-                </TouchableOpacity>
-              </View>
+          </View>
+          <View style={style.contentBadge}>
+            <View style={style.account}>
+              <Text style={style.textBadge}>Account</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('editProfile')}
+                style={style.list}>
+                <Icon name="user-edit" size={22} />
+                <Text style={style.title}>Edit Profile</Text>
+              </TouchableOpacity>
             </View>
-            {/* <View style={style.contentBadge}>
+          </View>
+          {/* <View style={style.contentBadge}>
               <View style={style.account}>
                 <Text style={style.textBadge}>About</Text>
                 <TouchableOpacity style={style.list}>
@@ -62,14 +65,13 @@ class Profile extends Component {
                 </TouchableOpacity>
               </View>
             </View> */}
-          </View>
-          <TouchableOpacity onPress={this.logout} style={style.button}>
-            <Text style={style.buttonText}>Logout</Text>
-          </TouchableOpacity>
         </View>
-      </>
-    )
-  }
+        <TouchableOpacity onPress={onLogout} style={style.button}>
+          <Text style={style.buttonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  )
 }
 
 export default Profile

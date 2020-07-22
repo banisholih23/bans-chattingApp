@@ -1,31 +1,38 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import {Text, TextInput, View, Image, StatusBar, StyleSheet, Dimensions, TouchableOpacity, Alert, KeyboardAvoidingView} from 'react-native';
+
 import bg from '../assets/images/bg.jpg'
+import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-class Register extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: '',
-      password: ''
+const RegisterScreen = () => {
+  const navigation = useNavigation();
+  const [email, changeEmail] = useState('');
+  const [password, changePassword] = useState('');
+  const [progress, changeProgress] = useState(false);
+
+  const register = async (_email, _password) => {
+    try {
+      await auth().createUserWithEmailAndPassword(_email, _password);
+    } catch (e) {
+      Alert.alert(e.code);
     }
-  }
+  };
 
-  login = () => {
-    this.props.navigation.navigate('login')
-  }
+  const onRegister = async () => {
+    changeProgress(true);
+    await register(email, password);
+    changeProgress(false);
+    Alert.alert('Success Register!');
+    // navigation.navigate('login');
+  };
 
-  register = () => {
-    this.props.navigation.navigate('login')
-  }
-
-  render() {
-    return (
-      <>  
-       <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
+  return(
+    <>
+      <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
         <StatusBar backgroundColor='#222423' />
         <Image source={bg} style={loginStyle.accent1} />
         <View style={loginStyle.accent2}>
@@ -39,9 +46,10 @@ class Register extends Component {
           <View style={loginStyle.formCard}>
             <View>
               {/* <Image source={email} style={loginStyle.imageUser} /> */}
-              <TextInput placeholder="Username" style={loginStyle.inputStyle} /> 
-              <TextInput placeholder="Email" style={loginStyle.inputStyle} />
+              {/* <TextInput onChangeText={changeUsername} placeholder="Username" style={loginStyle.inputStyle} />  */}
+              <TextInput onChangeText={changeEmail} placeholder="Email" style={loginStyle.inputStyle} />
               <TextInput
+                onChangeText={changePassword}
                 secureTextEntry={true}
                 placeholder="Password"
                 style={loginStyle.inputStyle}
@@ -50,7 +58,8 @@ class Register extends Component {
           </View>
           <View style={loginStyle.link}>
             <TouchableOpacity
-              onPress={this.register}
+              disabled={progress}
+              onPress={onRegister}
               style={loginStyle.submit}>
               <Text style={loginStyle.submitText}>Register</Text>
             </TouchableOpacity>
@@ -58,19 +67,18 @@ class Register extends Component {
           </View>
           <View style={loginStyle.container2}>
             <TouchableOpacity
-              onPress={this.login}
+              onPress={() => navigation.navigate('login')}
               style={loginStyle.submitRegist}>
               <Text style={loginStyle.textRegister}>Your Already Have Account ? Please Login</Text>
             </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView>
-      </>
-    )
-  }
+    </>
+  )
 }
 
-export default Register
+export default RegisterScreen
 
 const accentHeight = 250;
 
