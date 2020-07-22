@@ -56,15 +56,6 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
           </View>
-          {/* <View style={style.contentBadge}>
-              <View style={style.account}>
-                <Text style={style.textBadge}>About</Text>
-                <TouchableOpacity style={style.list}>
-                  <Icon Regular name="address-book" size={22} />
-                  <Text style={style.title}>Syarat Dan Ketentuan</Text>
-                </TouchableOpacity>
-              </View>
-            </View> */}
         </View>
         <TouchableOpacity onPress={onLogout} style={style.button}>
           <Text style={style.buttonText}>Logout</Text>
