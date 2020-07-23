@@ -1,38 +1,48 @@
 import React, {Component, useState} from 'react'
-import {Text, TextInput, View, Image, StatusBar, StyleSheet, Dimensions, TouchableOpacity, Alert, KeyboardAvoidingView} from 'react-native';
+import {Text, TextInput, View, Image, StatusBar, StyleSheet, Dimensions, TouchableOpacity, Alert, KeyboardAvoidingView, ActivityIndicator} from 'react-native';
 
 import bg from '../assets/images/bg.jpg'
-import auth from '@react-native-firebase/auth';
-import {useNavigation} from '@react-navigation/native';
+
+import {connect} from 'react-redux'
+import {register} from '../redux/actions/auth'
+import {createUser} from '../redux/actions/user'
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const RegisterScreen = () => {
-  const navigation = useNavigation();
-  const [email, changeEmail] = useState('');
-  const [password, changePassword] = useState('');
-  const [progress, changeProgress] = useState(false);
-
-  const register = async (_email, _password) => {
-    try {
-      await auth().createUserWithEmailAndPassword(_email, _password);
-    } catch (e) {
-      Alert.alert(e.code);
+class Register extends Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+      username: '',
+      email: '',
+      password: ''
     }
-  };
+  }
 
-  const onRegister = async () => {
-    changeProgress(true);
-    await register(email, password);
-    changeProgress(false);
-    Alert.alert('Success Register!');
-    // navigation.navigate('login');
-  };
+  login = () => {
+    this.props.navigation.navigate('login')
+  }
 
-  return(
-    <>
-      <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
+  register = () => {
+    const {username, email, password, } = this.state
+    this.props.register(email, password).then(() => {
+      this.props.createUser(email, username).then(() => {
+        this.props.navigation.navigate('login')
+        Alert.alert('Holaaa!!', 'Register success please Login!')
+      }).catch(function ()  {
+        Alert.alert('Sorry', 'Registered failed')
+      })
+    }).catch(function ()  {
+      Alert.alert('Sorry', 'Registered failed')
+    })
+  }
+
+  render(){
+    const {isLoading} = this.props.auth
+    return(
+      <>
+        <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
         <StatusBar backgroundColor='#222423' />
         <Image source={bg} style={loginStyle.accent1} />
         <View style={loginStyle.accent2}>
@@ -46,10 +56,10 @@ const RegisterScreen = () => {
           <View style={loginStyle.formCard}>
             <View>
               {/* <Image source={email} style={loginStyle.imageUser} /> */}
-              {/* <TextInput onChangeText={changeUsername} placeholder="Username" style={loginStyle.inputStyle} />  */}
-              <TextInput onChangeText={changeEmail} placeholder="Email" style={loginStyle.inputStyle} />
+              <TextInput onChangeText={(e) => {this.setState({username: e})}} placeholder="Username" style={loginStyle.inputStyle} /> 
+              <TextInput onChangeText={(e) => {this.setState({email: e})}} placeholder="Email" style={loginStyle.inputStyle} />
               <TextInput
-                onChangeText={changePassword}
+                onChangeText={(e) => {this.setState({password: e})}}
                 secureTextEntry={true}
                 placeholder="Password"
                 style={loginStyle.inputStyle}
@@ -57,28 +67,40 @@ const RegisterScreen = () => {
             </View>
           </View>
           <View style={loginStyle.link}>
-            <TouchableOpacity
-              disabled={progress}
-              onPress={onRegister}
+            {!isLoading ? (
+              <TouchableOpacity
+              onPress={this.register}
               style={loginStyle.submit}>
               <Text style={loginStyle.submitText}>Register</Text>
             </TouchableOpacity>
-            <Text style={loginStyle.forgotPassword}>Forgot Password?</Text>
+            ) : (
+              <View style={loginStyle.submit}>
+                <ActivityIndicator size='large' color='white' />
+              </View>
+            )}
+          <Text style={loginStyle.forgotPassword}>Forgot Password?</Text>
           </View>
           <View style={loginStyle.container2}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('login')}
+              onPress={this.login}
               style={loginStyle.submitRegist}>
               <Text style={loginStyle.textRegister}>Your Already Have Account ? Please Login</Text>
             </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView>
-    </>
-  )
+      </>
+    )
+  }
 }
 
-export default RegisterScreen
+const mapDispatchToProps = {register, createUser}
+
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
 
 const accentHeight = 250;
 
@@ -197,7 +219,6 @@ const loginStyle = StyleSheet.create({
   submitRegist: {
     position: 'absolute',
     bottom: -100,
-    right: 70,
     justifyContent: 'center',
     backgroundColor: 'transparent',
     alignItems: 'center',

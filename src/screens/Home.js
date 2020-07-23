@@ -36,7 +36,7 @@ class Home extends Component {
 
     return (
       <>
-        <StatusBar backgroundColor='#583A8E' />
+        <StatusBar backgroundColor='red' />
         <View style={style.fill}>
           <FlatList
             style={style.content}

@@ -12,60 +12,102 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import auth from '@react-native-firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+import { connect } from 'react-redux'
+import { logout } from '../redux/actions/auth'
+import { getUser } from '../redux/actions/user'
+
+import storage from '@react-native-firebase/storage'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-const Profile = () => {
-  const navigation = useNavigation();
-  const user = auth().currentUser;
-
-  const onLogout = async () => {
-    try {
-      await auth().signOut();
-    } catch (e) {
-      Alert.alert(e.code);
+class Profile extends Component {
+  constructor(props) {
+    super(props)
+    console.log('ini props', props)
+    this.state = {
+      name: this.props.user.dataUser.fullname,
+      imageName: this.props.user.dataUser.image,
+      image: 'https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg',
+      email: this.props.auth.email,
+      username: this.props.user.dataUser.username,
+      bio: this.props.user.dataUser.bio,
     }
-  };
-  return (
-    <>
-      <View style={style.content}>
-        <View style={{ ...{ flex: 1 } }}>
-          <View style={style.profile}>
-            <Text style={style.header}>Profile</Text>
-            <View style={style.contentProfile}>
-              <View style={style.imageWrapper}>
-                <Image style={style.image} />
+  }
+
+  edit = () => {
+    const {name, image, username, bio, email} = this.state
+    this.props.navigation.navigate('editProfile', 
+    {image: image, name: name, username: username, bio: bio, email: email})
+  }
+
+  logout = () => {
+    this.props.logout()
+    this.props.navigation.navigate('login')
+  }
+
+  getUrlUpload = () => {
+    const {imageName} = this.state
+    console.log(imageName)
+    storage().ref('/' + imageName).getDownloadURL().then((url) => {
+      console.log('ini url', url)
+      this.setState({image: url})
+    })
+  }
+
+  componentDidMount() {
+    this.getUrlUpload()
+  }
+
+  render() {
+    const { name, image, username, bio, email } = this.state
+    console.log(email)
+    return (
+      <>
+        <View style={style.content}>
+          <View style={{ ...{ flex: 1 } }}>
+            <View style={style.profile}>
+              <Text style={style.header}>Profile</Text>
+              <View style={style.contentProfile}>
+                <View style={style.imageWrapper}>
+                  <Image source={{uri: image}} style={style.image} />
+                </View>
+                <View style={style.textProfile}>
+                  <Text style={style.name}>{name}</Text>
+                  <Text style={style.phone}>{email}</Text>
+                  <Text style={style.bio}>"{bio}"</Text>
+                </View>
               </View>
-              <View style={style.textProfile}>
-                <Text style={style.name}>{user.email}</Text>
-                <Text style={style.phone}>082112720993</Text>
+            </View>
+            <View style={style.contentBadge}>
+              <View style={style.account}>
+                <Text style={style.textBadge}>Account</Text>
+                <TouchableOpacity
+                  onPress={this.edit}
+                  style={style.list}>
+                  <Icon name="user-edit" size={22} />
+                  <Text style={style.title}>Edit Profile</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
-          <View style={style.contentBadge}>
-            <View style={style.account}>
-              <Text style={style.textBadge}>Account</Text>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('editProfile')}
-                style={style.list}>
-                <Icon name="user-edit" size={22} />
-                <Text style={style.title}>Edit Profile</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <TouchableOpacity onPress={this.logout} style={style.button}>
+            <Text style={style.buttonText}>Logout</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={onLogout} style={style.button}>
-          <Text style={style.buttonText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-    </>
-  )
+      </>
+    )
+  }
 }
 
-export default Profile
+const mapDispatchToProps = { logout, getUser }
+
+const mapStateToProps = state => ({
+  user: state.user,
+  auth: state.auth
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
 
 const style = StyleSheet.create({
   fill: {
@@ -75,7 +117,7 @@ const style = StyleSheet.create({
   content: {
     alignSelf: 'stretch',
     margin: 20,
-    marginTop: 70,
+    marginTop: 20,
     flex: 1,
   },
   header: {
@@ -90,19 +132,18 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 50,
-    height: 50,
     borderRadius: 50,
+    resizeMode: 'cover',
+    flex: 1
   },
   imageWrapper: {
-    width: 50,
-    height: 50,
-    borderWidth: 2,
-    borderColor: 'white',
+    width: 70,
+    height: 70,
     borderRadius: 50,
-    marginRight: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white',
+    marginRight: 30,
+    borderWidth: 2,
+    borderColor: '#2476C3'
   },
   textProfile: {
     flex: 1,
@@ -115,6 +156,12 @@ const style = StyleSheet.create({
   phone: {
     color: '#AAAAAA',
     fontSize: 20,
+  },
+  bio: {
+    marginTop: 10,
+    color: '#AAAAAA',
+    fontStyle: 'italic',
+    fontSize: 17,
   },
   contentBadge: {
     margin: -5,

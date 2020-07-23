@@ -1,75 +1,109 @@
-import React, { useState } from 'react'
-import { Text, TextInput, View, Image, StatusBar, StyleSheet, Dimensions, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
+import React, { Component } from 'react'
+import { Text, TextInput, View, Image, StatusBar, StyleSheet, Dimensions, TouchableOpacity, Alert, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import bg from '../assets/images/bg.jpg'
 
-import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
+import { connect } from 'react-redux'
+import { login } from '../redux/actions/auth'
+import { getUser } from '../redux/actions/user'
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const Login = () => {
-
-  const navigation = useNavigation();
-  const [email, changeEmail] = useState('');
-  const [password, changePassword] = useState('');
-
-  const onLogin = async () => {
-    try {
-      await auth().signInWithEmailAndPassword(email, password);
-      Alert.alert('Holaaa!! Login Success')
-    } catch (e) {
-      Alert.alert(e.code);
+class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: '',
+      password: ''
     }
-  };
-  return (
-    <>
-      <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
-        <StatusBar backgroundColor='#222423' />
-        <Image source={bg} style={loginStyle.accent1} />
-        <View style={loginStyle.accent2}>
-          <View style={loginStyle.container}>
-            {/* <Image source={librarylogo} style={loginStyle.image} /> */}
-            <Text style={loginStyle.text}>Ban's-Chat</Text>
-            <Text style={loginStyle.text2}>Please Login</Text>
-          </View>
-        </View>
-        <View style={loginStyle.form}>
-          <View style={loginStyle.formCard}>
-            <View>
-              {/* <Image source={email} style={loginStyle.imageUser} /> */}
-              <TextInput onChangeText={changeEmail} placeholder="Email" style={loginStyle.inputStyle} />
-              {/* <Image source={pass} style={loginStyle.imagePass} /> */}
-              <TextInput
-                onChangeText={changePassword}
-                secureTextEntry={true}
-                placeholder="Password"
-                style={loginStyle.inputStyle}
-              />
+  }
+
+  register = () => {
+    this.props.navigation.navigate('register')
+  }
+
+  fetchUser = () => {
+    const email = 'bani@mail.com'
+    this.props.getUser(email)
+  }
+
+  login = () => {
+    const { email, password } = this.state
+    this.props.login(email, password).then(() => {
+      this.props.navigation.navigate('mainmenu')
+    }).catch(function () {
+      Alert.alert('Ooops!', 'Incorrect email or password :(')
+    })
+
+  }
+
+  render() {
+    const loading = {
+      user: this.props.user.isLoading,
+      auth: this.props.auth.isLoading
+    }
+    return (
+      <>
+        <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
+          <StatusBar backgroundColor='#222423' />
+          <Image source={bg} style={loginStyle.accent1} />
+          <View style={loginStyle.accent2}>
+            <View style={loginStyle.container}>
+              {/* <Image source={librarylogo} style={loginStyle.image} /> */}
+              <Text style={loginStyle.text}>Ban's-Chat</Text>
+              <Text style={loginStyle.text2}>Please Login</Text>
             </View>
           </View>
-          <View style={loginStyle.link}>
-            <TouchableOpacity
-              onPress={onLogin}
-              style={loginStyle.submit}>
-              <Text style={loginStyle.submitText}>Login</Text>
-            </TouchableOpacity>
-            <Text style={loginStyle.forgotPassword}>Forgot Password?</Text>
+          <View style={loginStyle.form}>
+            <View style={loginStyle.formCard}>
+              <View>
+                {/* <Image source={email} style={loginStyle.imageUser} /> */}
+                <TextInput onChangeText={(e) => { this.setState({ email: e }) }} placeholder="Email" style={loginStyle.inputStyle} />
+                {/* <Image source={pass} style={loginStyle.imagePass} /> */}
+                <TextInput
+                  onChangeText={(e) => { this.setState({ password: e }) }}
+                  secureTextEntry={true}
+                  placeholder="Password"
+                  style={loginStyle.inputStyle}
+                />
+              </View>
+            </View>
+            <View style={loginStyle.link}>
+              {!loading.user && !loading.auth ? (
+                <TouchableOpacity
+                  onPress={this.login}
+                  style={loginStyle.submit}>
+                  <Text style={loginStyle.submitText}>Login</Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={loginStyle.submit}>
+                  <ActivityIndicator size='large' color='white' />
+                </View>
+              )}
+              <Text style={loginStyle.forgotPassword}>Forgot Password?</Text>
+            </View>
+            <View style={loginStyle.container2}>
+              <TouchableOpacity
+                onPress={this.register}
+                style={loginStyle.submitRegist}>
+                <Text style={loginStyle.textRegister}>Don't Have Account ? Please Register</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={loginStyle.container2}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('register')}
-              style={loginStyle.submitRegist}>
-              <Text style={loginStyle.textRegister}>Don't Have Account ? Please Register</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
-    </>
-  )
+        </KeyboardAvoidingView>
+      </>
+    )
+  }
 }
 
-export default Login
+const mapDispatchToProps = { login, getUser }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.auth
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
 
 const accentHeight = 250;
 
