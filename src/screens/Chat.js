@@ -4,7 +4,7 @@ from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {connect} from 'react-redux'
-import {getUser} from '../redux/actions/user'
+import {getUser, sendLocation} from '../redux/actions/user'
 
 const deviceWidth = Dimensions.get('screen').width
 const deviceHeight = Dimensions.get('screen').height

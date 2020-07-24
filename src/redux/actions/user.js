@@ -1,5 +1,6 @@
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
+import Geolocation from '@react-native-community/geolocation';
 
 const createUser = (email, username)=>{
   return {
@@ -48,4 +49,20 @@ const uploadImage = (imageName, image)=>{
   }
 }
 
-export {createUser, getUser, editUser, uploadImage}
+const sendLocation = (email, latitude, longitude)=>{
+  return {
+    type: 'LOCATION',
+    payload: firestore()
+    .collection('users')
+    .doc(email)
+    .set({
+      location: {
+        latitude: latitude,
+        longitude: longitude
+      }
+    })
+  }
+}
+
+
+export {createUser, getUser, editUser, uploadImage, sendLocation}
