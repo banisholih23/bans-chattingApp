@@ -80,6 +80,7 @@ class EditProfile extends Component {
 
   render() {
     const { name, image, bio, username, isLoading, isLoadingImg } = this.state
+    console.log('ini image',image)
     return (
       <>
         <StatusBar backgroundColor="#222423" />
