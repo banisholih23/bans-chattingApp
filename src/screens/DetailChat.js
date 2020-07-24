@@ -48,7 +48,7 @@ class ChatDetail extends Component {
             <KeyboardAvoidingView behavior={'position'} style={style.avoiding}>
               <View style={style.inputWrapper}>
                 <TextInput
-                  placeholder='Type message'
+                  placeholder='Write a Message'
                   placeholderTextColor='#B8B8B8'
                   style={style.input}
                   multiline
@@ -117,9 +117,9 @@ const style = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     padding: 15,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
+    // borderTopLeftRadius: 15,
+    // borderTopRightRadius: 15,
+    // borderBottomRightRadius: 15,
   },
   messageSend: {
     width: deviceWidth - 80,
@@ -129,9 +129,9 @@ const style = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     padding: 15,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomLeftRadius: 20,
+    // borderTopLeftRadius: 15,
+    // borderTopRightRadius: 15,
+    // borderBottomLeftRadius: 15,
     marginRight: 10
   },
   chat: {

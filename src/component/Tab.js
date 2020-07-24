@@ -14,10 +14,6 @@ class Tab extends Component {
   render() {
     return (
       <>  
-        {/* <View style={{ backgroundColor: '#1B1B1B'}}></View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}></View>
-        <View style={{ height: 50, justifyContent: 'center', marginLeft: 20 }}></View>
-        <Text style={{ color: 'white', fontSize: 19 }}>Whatsapp</Text> */}
         <View style={style.header}>
           <View style={style.textPosition}>
             <Text style={style.textStyle}>BansChat</Text>
@@ -26,9 +22,9 @@ class Tab extends Component {
         <Top.Navigator
          tabBarOptions={{
           style: {
-            backgroundColor: '#222423',
+            backgroundColor: 'white',
           },
-            activeTintColor: 'white',
+            activeTintColor: 'black',
           }}
         >
           {/* <Top.Screen name='home' component={Home} /> */}
@@ -46,15 +42,16 @@ export default Tab
 const style = StyleSheet.create({
   header:{
     backgroundColor: '#222423',
-    height: 60,
+    height: 80,
   },
   textPosition:{
     marginTop: 20,
-    marginLeft: 20
+    marginLeft: 25,
+    marginBottom: 20
   },
   textStyle: {
     color: 'white',
     fontSize: 25,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   }
 })

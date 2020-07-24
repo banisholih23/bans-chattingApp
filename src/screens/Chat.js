@@ -84,6 +84,7 @@ class Chat extends Component {
                     placeholderTextColor='#B8B8B8'
                     style={style.searchInput}
                   />
+                  {/* <Icon name="search" color={'white'} size={20} /> */}
                 </View>
                 <View>
                   <FlatList
@@ -137,7 +138,7 @@ class List extends Component {
           </View>
           <Text style={style.chatDate}>{this.props.date}</Text>
         </View>
-        <View style={style.line} />
+        {/* <View style={style.line} /> */}
       </>
     )
   }
@@ -174,7 +175,8 @@ const style = StyleSheet.create({
   searchInput: {
     width: 350,
     height: 40,
-    borderRadius: 10,
+    borderRadius: 20,
+    marginTop: 10,
     color: 'white',
     backgroundColor: '#383838',
     paddingLeft: 10,
@@ -197,7 +199,7 @@ const style = StyleSheet.create({
     marginBottom: 15
   },
   listWrapper: {
-    marginTop: 20,
+    marginTop: 25,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: 10,

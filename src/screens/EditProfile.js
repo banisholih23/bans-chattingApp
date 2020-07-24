@@ -1,19 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  Button,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  StatusBar,
-  CheckBox,
-  ActivityIndicator,
-  Platform,
-  Alert
-} from 'react-native';
+import {View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Dimensions, StatusBar, ActivityIndicator,Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { connect } from 'react-redux'
@@ -31,14 +17,13 @@ class EditProfile extends Component {
     this.state = {
       name: this.props.route.params.name,
       image: this.props.route.params.image,
-      imageName: 'Change Avatar',
       imageUrl: this.props.route.params.image,
       username: this.props.route.params.username,
       bio: this.props.route.params.bio,
       email: this.props.route.params.email,
       isLoading: this.props.user.isLoading,
       isLoadingImg: this.props.user.isLoadingImg,
-      imgSource: []
+      imgSrc: []
     }
   }
 
@@ -55,7 +40,7 @@ class EditProfile extends Component {
 
   selectImage = () => {
     const options = {
-      title: 'Select Avatar',
+      title: 'Select Image',
       storageOptions: {
         skipBackup: true,
         path: '/images',
@@ -75,21 +60,21 @@ class EditProfile extends Component {
         this.setState({
           image: path,
           imageName: response.fileName,
-          imgSource: response
+          imgSrc: response
         });
       }
     })
   }
 
-  upload = () => {
-    const { imageName, image, imgSource } = this.state
+  uploadImage = () => {
+    const { imageName, image, imgSrc } = this.state
 
-    if (imgSource.fileSize <= 5000000 && imgSource.type === 'image/jpeg') {
+    if (imgSrc.fileSize <= 5000000 && imgSrc.type === 'image/jpeg') {
       this.props.uploadImage(imageName, image).then(() => {
-        Alert.alert('Yay!', 'Success upload image')
+        Alert.alert('Holaa!!', 'Upload Image Succesfully')
       })
     } else {
-      Alert.alert('Ooops!', 'Please select image less than 5 mb')
+      Alert.alert('Sorry', 'Please select image less than 5 mb')
     }
   }
 
@@ -111,8 +96,8 @@ class EditProfile extends Component {
                   <Text style={style.btnEditText}>Perbarui Foto Profile</Text>
                 </TouchableOpacity>
                 {!isLoadingImg ? (
-                  <TouchableOpacity style={style.uploadBtn} onPress={this.upload}>
-                    <Text style={style.uploadBtnText}>upload</Text>
+                  <TouchableOpacity style={style.uploadBtn} onPress={this.uploadImage}>
+                    <Text style={style.uploadBtnText}>submit</Text>
                   </TouchableOpacity>
                 ) : (
                     <View style={style.uploadBtn}>

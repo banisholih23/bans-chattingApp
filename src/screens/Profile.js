@@ -1,16 +1,5 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  StatusBar,
-  Image,
-  RefreshControl,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect } from 'react-redux'
 import { logout } from '../redux/actions/auth'
@@ -28,17 +17,17 @@ class Profile extends Component {
     this.state = {
       name: this.props.user.dataUser.fullname,
       imageName: this.props.user.dataUser.image,
-      image: 'https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg',
+      image: 'image',
       email: this.props.auth.email,
       username: this.props.user.dataUser.username,
       bio: this.props.user.dataUser.bio,
     }
   }
 
-  edit = () => {
-    const {name, image, username, bio, email} = this.state
-    this.props.navigation.navigate('editProfile', 
-    {image: image, name: name, username: username, bio: bio, email: email})
+  editProfile = () => {
+    const { name, image, username, bio, email } = this.state
+    this.props.navigation.navigate('editProfile',
+      { image: image, name: name, username: username, bio: bio, email: email })
   }
 
   logout = () => {
@@ -46,50 +35,70 @@ class Profile extends Component {
     this.props.navigation.navigate('login')
   }
 
-  getUrlUpload = () => {
-    const {imageName} = this.state
+  getUrl = () => {
+    const { imageName } = this.state
     console.log(imageName)
     storage().ref('/' + imageName).getDownloadURL().then((url) => {
       console.log('ini url', url)
-      this.setState({image: url})
+      this.setState({ image: url })
     })
   }
 
+  fetchData = () => {
+    const email = this.state.email
+    this.props.getUser(email)
+  }
+
+  // componentDidUpdate() {
+  //   this.props.getUser(this.state)
+  //   this.getUrl()
+  // }
+
   componentDidMount() {
-    this.getUrlUpload()
+    this.fetchData()
+    this.getUrl()
   }
 
   render() {
     const { name, image, username, bio, email } = this.state
+    const { isLoading } = this.props.user
     console.log(email)
     return (
       <>
         <View style={style.content}>
           <View style={{ ...{ flex: 1 } }}>
-            <View style={style.profile}>
-              <Text style={style.header}>Profile</Text>
-              <View style={style.contentProfile}>
-                <View style={style.imageWrapper}>
-                  <Image source={{uri: image}} style={style.image} />
-                </View>
-                <View style={style.textProfile}>
-                  <Text style={style.name}>{name}</Text>
-                  <Text style={style.phone}>{email}</Text>
-                  <Text style={style.bio}>"{bio}"</Text>
-                </View>
+            {isLoading ? (
+              <View style={style.loading}>
+                <ActivityIndicator size='large' color='white' />
               </View>
-            </View>
-            <View style={style.contentBadge}>
-              <View style={style.account}>
-                <Text style={style.textBadge}>Account</Text>
-                <TouchableOpacity
-                  onPress={this.edit}
-                  style={style.list}>
-                  <Icon name="user-edit" size={22} />
-                  <Text style={style.title}>Edit Profile</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            ) : (
+                <>
+                  <View style={style.profile}>
+                    <Text style={style.header}>Profile</Text>
+                    <View style={style.contentProfile}>
+                      <View style={style.imageWrapper}>
+                        <Image source={{ uri: image }} style={style.image} />
+                      </View>
+                      <View style={style.textProfile}>
+                        <Text style={style.name}>{name}</Text>
+                        <Text style={style.phone}>{email}</Text>
+                        <Text style={style.bio}>"{bio}"</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={style.contentBadge}>
+                    <View style={style.account}>
+                      <Text style={style.textBadge}>Account</Text>
+                      <TouchableOpacity
+                        onPress={this.editProfile}
+                        style={style.list}>
+                        <Icon name="user-edit" size={22} />
+                        <Text style={style.title}>Edit Profile</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </>
+              )}
           </View>
           <TouchableOpacity onPress={this.logout} style={style.button}>
             <Text style={style.buttonText}>Logout</Text>
@@ -119,6 +128,10 @@ const style = StyleSheet.create({
     margin: 20,
     marginTop: 20,
     flex: 1,
+  },
+  loading: {
+    marginTop: 20,
+    alignSelf: 'center'
   },
   header: {
     fontSize: 28,
