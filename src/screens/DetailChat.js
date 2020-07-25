@@ -117,9 +117,9 @@ const style = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     padding: 15,
-    // borderTopLeftRadius: 15,
-    // borderTopRightRadius: 15,
-    // borderBottomRightRadius: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderBottomRightRadius: 15,
   },
   messageSend: {
     width: deviceWidth - 80,
@@ -129,9 +129,9 @@ const style = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     padding: 15,
-    // borderTopLeftRadius: 15,
-    // borderTopRightRadius: 15,
-    // borderBottomLeftRadius: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderBottomLeftRadius: 15,
     marginRight: 10
   },
   chat: {

@@ -5,6 +5,7 @@ import bg from '../assets/images/bg.jpg'
 import { connect } from 'react-redux'
 import { login } from '../redux/actions/auth'
 import { getUser } from '../redux/actions/user'
+import AnimatedSplashScreen from 'react-native-animated-splash-screen'
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -14,17 +15,13 @@ class Login extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      isLoading: false
     }
   }
 
   register = () => {
     this.props.navigation.navigate('register')
-  }
-
-  fetchUser = () => {
-    const email = 'bani@mail.com'
-    this.props.getUser(email)
   }
 
   login = () => {
@@ -34,63 +31,83 @@ class Login extends Component {
     }).catch(function () {
       Alert.alert('Ooops!', 'Incorrect email or password :(')
     })
+  }
 
+  setTime = () => {
+    this.setState({isLoading: true})
+  }
+  componentDidMount(){
+    setTimeout(this.setTime, 3000)
   }
 
   render() {
-    const loading = {
-      user: this.props.user.isLoading,
-      auth: this.props.auth.isLoading
-    }
+    const loading = { user: this.props.user.isLoading, auth: this.props.auth.isLoading}
+    const {isLoading} = this.state
     return (
       <>
-        <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
-          <StatusBar backgroundColor='#222423' />
+        <StatusBar backgroundColor='#222423' />
           <Image source={bg} style={loginStyle.accent1} />
-          <View style={loginStyle.accent2}>
-            <View style={loginStyle.container}>
-              {/* <Image source={librarylogo} style={loginStyle.image} /> */}
-              <Text style={loginStyle.text}>Ban's-Chat</Text>
-              <Text style={loginStyle.text2}>Please Login</Text>
-            </View>
-          </View>
-          <View style={loginStyle.form}>
-            <View style={loginStyle.formCard}>
-              <View>
-                {/* <Image source={email} style={loginStyle.imageUser} /> */}
-                <TextInput onChangeText={(e) => { this.setState({ email: e }) }} placeholder="Email" style={loginStyle.inputStyle} />
-                {/* <Image source={pass} style={loginStyle.imagePass} /> */}
-                <TextInput
-                  onChangeText={(e) => { this.setState({ password: e }) }}
-                  secureTextEntry={true}
-                  placeholder="Password"
-                  style={loginStyle.inputStyle}
-                />
+          {isLoading && (
+            <>
+            <KeyboardAvoidingView behavior={'position'} style={loginStyle.parent}>
+            <View style={loginStyle.accent2}>
+              <View style={loginStyle.container}>
+                {/* <Image source={librarylogo} style={loginStyle.image} /> */}
+                <Text style={loginStyle.text}>Ban's-Chat</Text>
+                <Text style={loginStyle.text2}>Please Login</Text>
               </View>
             </View>
-            <View style={loginStyle.link}>
-              {!loading.user && !loading.auth ? (
-                <TouchableOpacity
-                  onPress={this.login}
-                  style={loginStyle.submit}>
-                  <Text style={loginStyle.submitText}>Login</Text>
-                </TouchableOpacity>
-              ) : (
-                <View style={loginStyle.submit}>
-                  <ActivityIndicator size='large' color='white' />
+            <View style={loginStyle.form}>
+              <View style={loginStyle.formCard}>
+                <View>
+                  {/* <Image source={email} style={loginStyle.imageUser} /> */}
+                  <TextInput onChangeText={(e) => { this.setState({ email: e }) }} placeholder="Email" style={loginStyle.inputStyle} />
+                  {/* <Image source={pass} style={loginStyle.imagePass} /> */}
+                  <TextInput
+                    onChangeText={(e) => { this.setState({ password: e }) }}
+                    secureTextEntry={true}
+                    placeholder="Password"
+                    style={loginStyle.inputStyle}
+                  />
                 </View>
-              )}
-              <Text style={loginStyle.forgotPassword}>Forgot Password?</Text>
+              </View>
+              <View style={loginStyle.link}>
+                {!loading.user && !loading.auth ? (
+                  <TouchableOpacity
+                    onPress={this.login}
+                    style={loginStyle.submit}>
+                    <Text style={loginStyle.submitText}>Login</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={loginStyle.submit}>
+                    <ActivityIndicator size='large' color='white' />
+                  </View>
+                )}
+                <Text style={loginStyle.forgotPassword}>Forgot Password?</Text>
+              </View>
+              <View style={loginStyle.container2}>
+                <TouchableOpacity
+                  onPress={this.register}
+                  style={loginStyle.submitRegist}>
+                  <Text style={loginStyle.textRegister}>Don't Have Account ? Please Register</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={loginStyle.container2}>
-              <TouchableOpacity
-                onPress={this.register}
-                style={loginStyle.submitRegist}>
-                <Text style={loginStyle.textRegister}>Don't Have Account ? Please Register</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+            </>
+          )}
+          {!isLoading && (
+            <>
+            <AnimatedSplashScreen
+            translucent={true}
+            isLoaded={isLoading}
+            logoImage={require('../assets/images/splashScreen.png')}
+            backgroundColor={"#1B1B1B"}
+            logoHeight={120}
+            logoWidht={120}
+            />
+            </>
+          )}
       </>
     )
   }

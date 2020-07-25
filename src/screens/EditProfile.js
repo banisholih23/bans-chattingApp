@@ -3,7 +3,7 @@ import {View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Dimensions, 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { connect } from 'react-redux'
-import { editUser, uploadImage } from '../redux/actions/user'
+import { patchUser, uploadImage } from '../redux/actions/user'
 import { logout } from '../redux/actions/auth'
 import ImagePicker from 'react-native-image-picker'
 
@@ -23,13 +23,14 @@ class EditProfile extends Component {
       email: this.props.route.params.email,
       isLoading: this.props.user.isLoading,
       isLoadingImg: this.props.user.isLoadingImg,
+      status: this.props.route.params.status,
       imgSrc: []
     }
   }
 
   submit = () => {
-    const { name, username, bio, email, imageName } = this.state
-    this.props.editUser(email, name, bio, username, imageName).then(() => {
+    const { name, username, status, bio, email, imageName } = this.state
+    this.props.patchUser(email, name, bio, username, imageName, status).then(() => {
       this.props.logout()
       this.props.navigation.navigate('login')
       Alert.alert('holaa!! edit profile succes', 'Please Login Again')
@@ -79,7 +80,7 @@ class EditProfile extends Component {
   }
 
   render() {
-    const { name, image, bio, username, isLoading, isLoadingImg } = this.state
+    const { name, image, bio, status, username, isLoading, isLoadingImg } = this.state
     console.log('ini image',image)
     return (
       <>
@@ -129,6 +130,14 @@ class EditProfile extends Component {
                   style={style.textInput}
                   placeholder="bio"
                 />
+                <Text style={style.textContent}>Status</Text>
+                <TextInput
+                  value={status}
+                  onChangeText={(e) => { this.setState({ status: e }) }}
+                  multiline
+                  style={style.textInput}
+                  placeholder="status"
+                />
                 {/* <Text style={style.textContent}>Email</Text>
                 <TextInput style={style.textInput} placeholder="banisholih23@gmail.com" /> */}
               </View>
@@ -153,7 +162,7 @@ class EditProfile extends Component {
   }
 }
 
-const mapDispatchToProps = { editUser, logout, uploadImage }
+const mapDispatchToProps = { patchUser, logout, uploadImage }
 
 const mapStateToProps = state => ({
   user: state.user

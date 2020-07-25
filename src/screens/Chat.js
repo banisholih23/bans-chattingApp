@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import {View, TextInput, StyleSheet, Dimensions, StatusBar, TouchableOpacity, Text, FlatList, Image, ActivityIndicator} 
 from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import database from '@react-native-firebase/database';
 
 import {connect} from 'react-redux'
-import {getUser, sendLocation} from '../redux/actions/user'
+import {getUser, sendLocation, friends} from '../redux/actions/user'
 
 const deviceWidth = Dimensions.get('screen').width
 const deviceHeight = Dimensions.get('screen').height
@@ -13,9 +14,12 @@ class Chat extends Component {
   constructor(props){
     super(props)
     this.state = {
-      email: this.props.auth.email
+      email: this.props.auth.email,
+      friends_: [],
+      isLoading: true
     }
   }
+
   register = () => {
     this.props.navigation.navigate('register')
   }
@@ -91,7 +95,7 @@ class Chat extends Component {
                     data={data}
                     style={style.flatList}
                     renderItem={({item}) => (
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate('chat-detail', 
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate('detailChat', 
                       {image: item.image, name: item.name, chat: item.chat})}>
                         <List
                           name={item.name}
@@ -107,7 +111,6 @@ class Chat extends Component {
               </View>
               <View style={style.btnWrapper}>
                 <TouchableOpacity style={style.btn} >
-                  {/* <Text style={style.btnText}>+</Text> */}
                   <Icon name="user-edit" color='white' size={22} />
                 </TouchableOpacity>
               </View>

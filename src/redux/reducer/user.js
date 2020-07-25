@@ -98,6 +98,16 @@ const user = (state=initialState, action) => {
         isError: false,
       }
     }
+    case 'FRIENDS': {
+      const { friends, friendsKey } = action.payload;
+      return {
+        ...state,
+        ...{
+          friends,
+          friendsKey,
+        },
+      };
+    }
     case 'LOGOUT': {
       return {
         ...state,

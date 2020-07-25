@@ -1,10 +1,9 @@
 const initialState = {
+  errorMessage: '',
   isLoading: false,
   isLogin: false,
   isError: false,
-  errorMsg: '',
   email: '',
-  dataCurrent: [],
 }
 
 const auth = (state=initialState, action) => {
@@ -21,7 +20,7 @@ const auth = (state=initialState, action) => {
         ...state,
         isLoading: false,
         isError: true,
-        errorMsg: 'failed!',
+        errorMessage: 'failed!',
       }
     }
     case 'REGISTER_FULFILLED': {
@@ -43,7 +42,7 @@ const auth = (state=initialState, action) => {
         ...state,
         isLoading: false,
         isError: true,
-        errorMsg: 'failed!',
+        errorMessage: 'failed',
       }
     }
     case 'LOGIN_FULFILLED': {

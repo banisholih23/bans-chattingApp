@@ -38,7 +38,7 @@ class App extends Component {
                 <Stack.Screen component={Location} name='maps' options={{ headerShown: false }} />
                 <Stack.Screen
                   component={DetailChat}
-                  name='chat-detail'
+                  name='detailChat'
                   options={{
                     title: '',
                     headerTransparent: true,

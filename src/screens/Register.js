@@ -5,7 +5,7 @@ import bg from '../assets/images/bg.jpg'
 
 import {connect} from 'react-redux'
 import {register} from '../redux/actions/auth'
-import {createUser} from '../redux/actions/user'
+import {addUser} from '../redux/actions/user'
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -27,7 +27,7 @@ class Register extends Component{
   register = () => {
     const {username, email, password, } = this.state
     this.props.register(email, password).then(() => {
-      this.props.createUser(email, username).then(() => {
+      this.props.addUser(email, username).then(() => {
         this.props.navigation.navigate('login')
         Alert.alert('Holaaa!!', 'Register success please Login!')
       }).catch(function ()  {
@@ -94,7 +94,7 @@ class Register extends Component{
   }
 }
 
-const mapDispatchToProps = {register, createUser}
+const mapDispatchToProps = {register, addUser}
 
 const mapStateToProps = state => ({
   auth: state.auth

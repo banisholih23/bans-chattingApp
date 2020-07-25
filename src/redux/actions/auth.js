@@ -12,12 +12,7 @@ const login = (email, password)=>{
     payload: auth().signInWithEmailAndPassword(email, password)
   }
 }
-const currentUser = ()=>{
-  return {
-    type: 'CURRENT',
-    payload: auth().currentUser()
-  }
-}
+
 const logout = ()=>{
   return {
     type: 'LOGOUT',
@@ -25,4 +20,4 @@ const logout = ()=>{
   }
 }
 
-export {register, login, currentUser, logout}
+export {register, login, logout}

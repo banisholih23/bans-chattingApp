@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect } from 'react-redux'
 import { logout } from '../redux/actions/auth'
@@ -21,13 +21,14 @@ class Profile extends Component {
       email: this.props.auth.email,
       username: this.props.user.dataUser.username,
       bio: this.props.user.dataUser.bio,
+      status: this.props.user.dataUser.status,
     }
   }
 
   editProfile = () => {
-    const { name, image, username, bio, email } = this.state
+    const { name, image, username, bio, status, email } = this.state
     this.props.navigation.navigate('editProfile',
-      { image: image, name: name, username: username, bio: bio, email: email })
+      { image: image, name: name, status: status, username: username, bio: bio, email: email })
   }
 
   logout = () => {
@@ -60,7 +61,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { name, image, username, bio, email } = this.state
+    const { name, image, status, username, bio, email } = this.state
     const { isLoading } = this.props.user
     console.log(email)
     return (
@@ -82,6 +83,7 @@ class Profile extends Component {
                       <View style={style.textProfile}>
                         <Text style={style.name}>{name}</Text>
                         <Text style={style.phone}>{email}</Text>
+                        <Text style={style.phone}>{status}</Text>
                         <Text style={style.bio}>"{bio}"</Text>
                       </View>
                     </View>
@@ -94,6 +96,15 @@ class Profile extends Component {
                         style={style.list}>
                         <Icon name="user-edit" size={22} />
                         <Text style={style.title}>Edit Profile</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={style.contentBadge}>
+                    <View style={style.account}>
+                      <Text style={style.textBadge}>About</Text>
+                      <TouchableOpacity style={style.list}>
+                        <Icon Regular name="address-book" size={22} />
+                        <Text style={style.title}>Syarat Dan Ketentuan</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -150,8 +161,8 @@ const style = StyleSheet.create({
     flex: 1
   },
   imageWrapper: {
-    width: 70,
-    height: 70,
+    width: 100,
+    height: 100,
     borderRadius: 50,
     backgroundColor: 'white',
     marginRight: 30,

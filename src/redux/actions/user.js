@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
 import Geolocation from '@react-native-community/geolocation';
 
-const createUser = (email, username)=>{
+const addUser = (email, username)=>{
   return {
     type: 'CREATEUSER',
     payload: firestore()
@@ -12,7 +12,8 @@ const createUser = (email, username)=>{
       username: username,
       fullname: '-',
       bio: '-',
-      image: 'ava.jpg'
+      image: 'image.jpg',
+      status: '-'
     })
   }
 }
@@ -25,7 +26,7 @@ const getUser = (email)=>{
     .get()
   }
 }
-const editUser = (email, name, bio, username, imageName)=>{
+const patchUser = (email, name, bio, username, imageName, status)=>{
   return {
     type: 'CREATEUSER',
     payload: firestore()
@@ -35,6 +36,7 @@ const editUser = (email, name, bio, username, imageName)=>{
       fullname: name,
       username: username,
       bio: bio,
+      status: status,
       image: imageName
     })
   }
@@ -64,5 +66,10 @@ const sendLocation = (email, latitude, longitude)=>{
   }
 }
 
+const friends = (request) => ({
+  type: 'FRIENDS',
+  payload: request,
+});
 
-export {createUser, getUser, editUser, uploadImage, sendLocation}
+
+export {addUser, getUser, patchUser, uploadImage, sendLocation, friends}
