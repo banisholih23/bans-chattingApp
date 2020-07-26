@@ -13,6 +13,7 @@ import ProfileScreen from '../screens/Profile'
 import EditProfile from '../screens/EditProfile'
 import Location from '../screens/Maps'
 import DetailChat from '../screens/DetailChat'
+import StartChat from '../screens/StartChat'
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,17 @@ class App extends Component {
                   }}
                   component={EditProfile}
                   name={'editProfile'}
+                />
+                <Stack.Screen
+                  options={{
+                    title: 'Start a Chat',
+                    headerTintColor: '#fff',
+                    headerStyle: {
+                      backgroundColor: '#222423',
+                    },
+                  }}
+                  component={StartChat}
+                  name={'startChat'}
                 />
               </>
             )}
