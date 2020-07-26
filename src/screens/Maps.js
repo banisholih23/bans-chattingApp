@@ -1,69 +1,154 @@
 import React, {Component} from 'react'
-import {View, Dimensions} from 'react-native'
+import {View, ActivityIndicator, StyleSheet, Dimensions, StatusBar, TouchableOpacity, Text, Alert} from 'react-native'
 import MapView, {Marker} from 'react-native-maps'
-import Geolocation from '@react-native-community/geolocation';
+import {connect} from 'react-redux'
+import {sendLocation} from '../redux/actions/user'
+import Geolocation from '@react-native-community/geolocation'
 
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('screen').width
+const deviceHeight = Dimensions.get('screen').height
 
-class Maps extends Component {
+class Location extends Component {
   constructor(props){
     super(props)
     this.state = {
-      region: {}
+      latitude: 0,
+      longitude: 0,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+      email: this.props.auth.email,
+      region: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }
     }
-  }
-
-  onRegionChange = (info) => {
-    if(info.coords){
-      this.setState({
-        region: {
-          longitude: info.coords.longitude, 
-          latitude: info.coords.latitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0922
-        }
-      })
-    } else {
-      this.setState({region: info})
-    }
-  }
-
-  onDragMarker = () => {
-    Geolocation.getCurrentPosition(info => {
-      this.setState({
-        markerPosition: {
-        longitude: info.coords.longitude, 
-        latitude: info.coords.latitude
-        }
-      })
-      this.onRegionChange(info)
-    })
   }
   
-  componentDidMount(){
-    this.onDragMarker() 
+  shareLoc = () => {
+    const {region, email} = this.state
+    this.props.sendLocation(email, region.latitude, region.longitude).then(() => {
+      Alert.alert('Success!', 'Your location has been shared')
+    }).catch(function() {
+      Alert.alert('Sorry', 'Failed to share location')
+    })
   }
-  render(){
+
+  componentDidUpdate(){
+    console.log(this.state.region)
+  }
+
+  getLocation = () => {
+    Geolocation.getCurrentPosition(info => this.setState({
+      latitude: info.coords.latitude,
+      longitude: info.coords.longitude,
+      region:{
+        latitude: info.coords.latitude,
+        longitude: info.coords.longitude
+      }
+    }))
+  }
+
+  componentDidMount(){
+   this.getLocation()
+  }
+  render() {
+    const {latitude, longitude, latitudeDelta, longitudeDelta} = this.state
+    const {isLoadingLoc, isLoading} = this.props.user
     return(
-      <>  
-        <View style={{flex : 1}}>
-          <MapView
-            style={{width: deviceWidth, height: deviceHeight}}
-            initialRegion={this.state.region}
-            region={this.state.region}
-            // onRegionChange={this.onRegionChange}
-          >
-          <Marker draggable coordinate={this.state.markerPosition}
-            onDragEnd={(e) => this.onDragMarker({markerPosition: e.nativeEvent.coordinate})} 
-            title={'My Location'} 
-            description={'Maps'} 
-          />
-          </MapView>
+      <>
+        <StatusBar backgroundColor='#222324' />
+        <View style={style.fill}>
+          {isLoading? (
+            <View style={style.loading}>
+              <ActivityIndicator size='large' color='white' />
+            </View>
+          ):(
+            <>
+              <View style={style.mapWrapper}>
+                <MapView
+                  style={style.map}
+                  initialRegion={{
+                    latitude: latitude,
+                    longitude: longitude,
+                    latitudeDelta: latitudeDelta,
+                    longitudeDelta: longitudeDelta,
+                  }}>
+                  <Marker draggable
+                    coordinate={this.state.region}
+                    onDragEnd={(e) => this.setState({ region: e.nativeEvent.coordinate })}
+                  />
+                </MapView>
+              </View>
+              {isLoadingLoc ? (
+                <View style={style.btnEdit}>
+                  <ActivityIndicator size='small' color='white' />
+                </View>
+              ):(
+                <TouchableOpacity style={style.btnEdit} onPress={this.shareLoc}>
+                  <Text style={style.btnEditText}>SHARE MY LOCATION</Text>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
         </View>
       </>
     )
   }
 }
 
-export default Maps
+const mapDispatchToProps = {sendLocation}
+const mapStateToProps = state => ({
+  user: state.user,
+  auth: state.auth
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Location)
+
+const style = StyleSheet.create({
+  fill: {
+    flex: 1,
+    // backgroundColor: '#1B1B1B'
+  },
+  loading: {
+    marginTop: 20,
+    alignSelf: 'center'
+  },
+  mapWrapper: {
+    width: deviceWidth,
+    height: deviceHeight,
+    alignSelf: 'center',
+    backgroundColor: 'white',
+  },
+  map: {
+    flex: 1,
+  },
+  btnEdit: {
+    width: 300,
+    marginTop: deviceHeight - 1050,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#2C2B2C',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  btnEditText: {
+    color: 'white',
+    fontWeight: 'bold',
+    letterSpacing: 2
+  },
+  locationWrapper: {
+    width: 300,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: '#2B2B2B',
+    alignSelf: 'center',
+    marginTop: 40
+  },
+  locationInfo: {
+    color: 'white',
+    marginTop: 20
+  }
+})

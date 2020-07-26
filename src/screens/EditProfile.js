@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Dimensions, StatusBar, ActivityIndicator,Alert} from 'react-native';
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Dimensions, StatusBar, ActivityIndicator, Alert, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { connect } from 'react-redux'
@@ -81,82 +81,84 @@ class EditProfile extends Component {
 
   render() {
     const { name, image, bio, status, username, isLoading, isLoadingImg } = this.state
-    console.log('ini image',image)
+    console.log('ini image', image)
     return (
       <>
         <StatusBar backgroundColor="#222423" />
-        <View style={style.fill}>
-          <View style={style.content}>
-            <View style={{ ...{ flex: 1 } }}>
-              <View style={style.contentProfile}>
-                <View style={style.imageWrapper}>
-                  <Image source={{ uri: image }} style={style.img} />
-                </View>
-                <TouchableOpacity
-                  onPress={this.selectImage}
-                  style={style.btnEditImage}>
-                  <Text style={style.btnEditText}>Perbarui Foto Profile</Text>
-                </TouchableOpacity>
-                {!isLoadingImg ? (
-                  <TouchableOpacity style={style.uploadBtn} onPress={this.uploadImage}>
-                    <Text style={style.uploadBtnText}>submit</Text>
+        <ScrollView>
+          <View style={style.fill}>
+            <View style={style.content}>
+              <View style={{ ...{ flex: 1 } }}>
+                <View style={style.contentProfile}>
+                  <View style={style.imageWrapper}>
+                    <Image source={{ uri: image }} style={style.img} />
+                  </View>
+                  <TouchableOpacity
+                    onPress={this.selectImage}
+                    style={style.btnEditImage}>
+                    <Text style={style.btnEditText}>Perbarui Foto Profile</Text>
                   </TouchableOpacity>
-                ) : (
-                    <View style={style.uploadBtn}>
-                      <ActivityIndicator size='small' color='white' />
-                    </View>
-                  )}
-              </View>
-              <View style={style.content2}>
-                <Text style={style.textContent}>Nama Lengkap</Text>
-                <TextInput
-                  value={name}
-                  onChangeText={(e) => { this.setState({ name: e }) }}
-                  style={style.textInput}
-                  placeholder="BaniSholih"
-                />
-                <Text style={style.textContent}>Username</Text>
-                <TextInput
-                  value={username}
-                  onChangeText={(e) => { this.setState({ username: e }) }}
-                  style={style.textInput}
-                  placeholder="yourUsername"
-                />
-                <Text style={style.textContent}>Bio</Text>
-                <TextInput
-                  value={bio}
-                  onChangeText={(e) => { this.setState({ bio: e }) }}
-                  multiline
-                  style={style.textInput}
-                  placeholder="bio"
-                />
-                <Text style={style.textContent}>Status</Text>
-                <TextInput
-                  value={status}
-                  onChangeText={(e) => { this.setState({ status: e }) }}
-                  multiline
-                  style={style.textInput}
-                  placeholder="status"
-                />
-                {/* <Text style={style.textContent}>Email</Text>
-                <TextInput style={style.textInput} placeholder="banisholih23@gmail.com" /> */}
-              </View>
-            </View>
-            {!isLoading ? (
-              <TouchableOpacity onPress={this.submit} style={style.button}>
-                <Text style={style.buttonText}>SUBMIT</Text>
-              </TouchableOpacity>
-            ) : (
-                <View style={style.button}>
-                  <Text style={style.buttonText}>SUBMIT</Text>
+                  {!isLoadingImg ? (
+                    <TouchableOpacity style={style.uploadBtn} onPress={this.uploadImage}>
+                      <Text style={style.uploadBtnText}>submit</Text>
+                    </TouchableOpacity>
+                  ) : (
+                      <View style={style.uploadBtn}>
+                        <ActivityIndicator size='small' color='white' />
+                      </View>
+                    )}
                 </View>
-              )}
-            <View style={{ ...{ marginTop: 15 } }}>
-              <Text style={{ ...{ color: 'red', textAlign: 'center' } }}>
-              </Text>
+                <View style={style.content2}>
+                  <Text style={style.textContent}>Nama Lengkap</Text>
+                  <TextInput
+                    value={name}
+                    onChangeText={(e) => { this.setState({ name: e }) }}
+                    style={style.textInput}
+                    placeholder="BaniSholih"
+                  />
+                  <Text style={style.textContent}>Username</Text>
+                  <TextInput
+                    value={username}
+                    onChangeText={(e) => { this.setState({ username: e }) }}
+                    style={style.textInput}
+                    placeholder="yourUsername"
+                  />
+                  <Text style={style.textContent}>Bio</Text>
+                  <TextInput
+                    value={bio}
+                    onChangeText={(e) => { this.setState({ bio: e }) }}
+                    multiline
+                    style={style.textInput}
+                    placeholder="bio"
+                  />
+                  <Text style={style.textContent}>Status</Text>
+                  <TextInput
+                    value={status}
+                    onChangeText={(e) => { this.setState({ status: e }) }}
+                    multiline
+                    style={style.textInput}
+                    placeholder="status"
+                  />
+                  {/* <Text style={style.textContent}>Email</Text>
+                <TextInput style={style.textInput} placeholder="banisholih23@gmail.com" /> */}
+                </View>
+              </View>
+              {isLoading ? (
+                <View style={style.button}>
+                  <ActivityIndicator size='small' color='white' />
+                </View>
+              ) : (
+                  <TouchableOpacity onPress={this.submit} style={style.button}>
+                    <Text style={style.buttonText}>SUBMIT</Text>
+                  </TouchableOpacity>
+                )}
+              <View style={{ ...{ marginTop: 15 } }}>
+                <Text style={{ ...{ color: 'red', textAlign: 'center' } }}>
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </>
     )
   }

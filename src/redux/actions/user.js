@@ -13,7 +13,11 @@ const addUser = (email, username)=>{
       fullname: '-',
       bio: '-',
       image: 'image.jpg',
-      status: '-'
+      status: '-',
+      location: {
+        latitude: 0,
+        longitude: 0
+      }
     })
   }
 }

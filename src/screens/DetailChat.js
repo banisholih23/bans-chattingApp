@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {Text, View, FlatList, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
@@ -65,18 +65,21 @@ const ChatDetail = () => {
     bio: route.params.bio,
     email: route.params.email,
     myEmail: route.params.myEmail,
-    status: route.params.status
+    status: route.params.status,
+    location: route.params.location
   }
   console.log('ini State CUy', state)
   const res2 = state.email.replace('@', '0')
   const userReceive = res2.replace('.', '0')
   return (
     <View style={style.fill}>
-      <TouchableOpacity style={style.header} onPress={() => {navigation.navigate('user-detail', {
+      <TouchableOpacity style={style.header} onPress={() => {navigation.navigate('detailUser', {
       image: state.image,
       name: state.name,
       username: state.username,
       bio: state.bio,
+      status: state.status,
+      location: state.location
     })}}>
         <View style={style.imgWrapper}>
           <Image style={style.img} source={{uri: state.image}}/>

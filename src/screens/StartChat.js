@@ -28,7 +28,7 @@ class StartChat extends Component {
   }
 
   startChat = () => {
-    const { name, image, email, bio, username, status } = this.state
+    const { name, image, email, bio, username, status, location } = this.state
 
     this.props.navigation.navigate('detailChat', {
       name: name,
@@ -37,7 +37,8 @@ class StartChat extends Component {
       myEmail: this.props.auth.email,
       bio: bio,
       username: username,
-      status: status
+      status: status,
+      location: location
     })
   }
 
@@ -51,6 +52,7 @@ class StartChat extends Component {
         username: this.props.user.dataUser.username,
         bio: this.props.user.dataUser.bio,
         status: this.props.user.dataUser.status,
+        location: this.props.user.dataUser.location
       })
       this.getUrl()
     }).catch(function () {
@@ -258,7 +260,6 @@ const style = StyleSheet.create({
   btnStartText: {
     color: 'white',
     fontWeight: 'bold',
-    letterSpacing: 5,
-    fontSize: 15,
+    fontSize: 18,
   },
 })

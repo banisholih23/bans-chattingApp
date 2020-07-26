@@ -14,6 +14,8 @@ import EditProfile from '../screens/EditProfile'
 import Location from '../screens/Maps'
 import DetailChat from '../screens/DetailChat'
 import StartChat from '../screens/StartChat'
+import DetailUser from '../screens/DetailUser'
+import FriendLoc from '../screens/FriendLoc'
 
 const Stack = createStackNavigator();
 
@@ -67,6 +69,24 @@ class App extends Component {
                   }}
                   component={StartChat}
                   name={'startChat'}
+                />
+                <Stack.Screen
+                  component={FriendLoc}
+                  name='friendLoc'
+                  options={{
+                    title: '',
+                    headerTransparent: true,
+                    headerTintColor: 'black'
+                  }}
+                />
+                <Stack.Screen
+                  component={DetailUser}
+                  name='detailUser'
+                  options={{
+                    title: '',
+                    headerTransparent: true,
+                    headerTintColor: 'white'
+                  }}
                 />
               </>
             )}
