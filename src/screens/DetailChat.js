@@ -13,10 +13,10 @@ const ChatDetail = () => {
   }, []);
 
   const ReceiveMessage = () => {
-    const res = state.myEmail.replace('@', '0')
-    const res2 = state.email.replace('@', '0')
-    const userId = res.replace('.', '0')
-    const userReceive = res2.replace('.', '0')
+    const mEmail = state.myEmail.replace('@', '0')
+    const emailFormSearch = state.email.replace('@', '0')
+    const userId = mEmail.replace('.', '0')
+    const userReceive = emailFormSearch.replace('.', '0')
     database()
       .ref(`/chat/${userId}/${userReceive}`)
       .once('value')
@@ -35,10 +35,10 @@ const ChatDetail = () => {
   const sendMessage = useCallback((messages = []) => {
     for (let i = 0; i < messages.length; i++) {
       const {text, user} = messages[i];
-      const res = state.myEmail.replace('@', '0')
-      const res2 = state.email.replace('@', '0')
-      const userId = res.replace('.', '0')
-      const userReceive = res2.replace('.', '0')
+      const mEmail = state.myEmail.replace('@', '0')
+      const emailFormSearch = state.email.replace('@', '0')
+      const userId = mEmail.replace('.', '0')
+      const userReceive = emailFormSearch.replace('.', '0')
       const message = {
         text,
         user,
@@ -69,8 +69,8 @@ const ChatDetail = () => {
     location: route.params.location
   }
   console.log('ini State CUy', state)
-  const res2 = state.email.replace('@', '0')
-  const userReceive = res2.replace('.', '0')
+  const emailFormSearch = state.email.replace('@', '0')
+  const userReceive = emailFormSearch.replace('.', '0')
   return (
     <View style={style.fill}>
       <TouchableOpacity style={style.header} onPress={() => {navigation.navigate('detailUser', {

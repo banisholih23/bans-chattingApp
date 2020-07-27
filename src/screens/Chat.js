@@ -94,7 +94,7 @@ class Chat extends Component {
                   />
                   {/* <Icon name="search" color={'white'} size={20} /> */}
                 </View>
-                <View>
+                {/* <View>
                   <FlatList
                     data={data}
                     style={style.flatList}
@@ -111,7 +111,7 @@ class Chat extends Component {
                     )}
                     keyExtractor={item => item.id.toString()}
                   />
-                </View>
+                </View> */}
               </View>
               <View style={style.btnWrapper}>
                 <TouchableOpacity onPress={this.startChat} style={style.btn} >

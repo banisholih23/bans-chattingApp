@@ -62,7 +62,7 @@ class StartChat extends Component {
 
   getUrl = () => {
     const { imageName } = this.state
-    storage().ref(imageName).getDownloadURL().then((url) => {
+    storage().ref('/' + imageName).getDownloadURL().then((url) => {
       this.setState({ image: url })
     })
   }
