@@ -31,10 +31,7 @@
 * [`react-native`](https://facebook.github.io/react-native/docs/getting-started)
 * `Google maps API Key` you can get it [here](https://developers.google.com/maps/documentation/javascript/get-api-key)
 * `Config realtime database firebase for WEB` you can get it [here](https://firebase.google.com/)
-#### Example config
-```
 
-```
 ## Usage for development
 1. Open your terminal or command prompt
 2. Type `git clone https://github.com/banisholih23/bans-chattingApp.git`
