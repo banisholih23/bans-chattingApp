@@ -1,6 +1,6 @@
 <h1 align="center">BansChat</h1>
 <p align="center">
-  <img src="./src/assets/image/splashScreen.png" width="200">
+  <img src="./src/assets/images/splashScreen.png" width="200">
 </p>
 <p align="center">
   Build with React Native.
