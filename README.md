@@ -51,34 +51,17 @@
 
 ## Screenshot 
 
+<div align="center">
+    <img width="250" src="./src/assets/images/ss/splash.jpg">
+    <img width="250" src="./src/assets/images/ss/login.jpg" width="200">
+    <img width="250" src="./src/assets/images/ss/home.jpg">
+    <img width="250" src="./src/assets/images/ss/chat.jpg">
+    <img width="250" src="./src/assets/images/ss/maps.jpg">
+    <img width="250" src="./src/assets/images/ss/profile.jpg">
+    <img width="250" src="./src/assets/images/ss/editProfile.jpg">
+</div>
 
-<kbd>
-<img src="./src/assets/images/ss/splash.jpg" width="200">
-</kbd>
-
-<kbd>
-<img src="./src/assets/images/ss/login.jpg" width="200">
-</kbd>
-
-<kbd>
-<img src="./src/assets/images/ss/home.jpg" width="200">
-</kbd>
-
-<kbd>
-<img src="./src/assets/images/ss/chat.jpg" width="200">
-</kbd>
-
-<kbd>
-<img src="./src/assets/images/ss/maps.jpg" width="200">
-</kbd>
-
-<kbd>
-<img src="./src/assets/images/ss/profile.jpg" width="200">
-</kbd>
-
-<kbd>
-<img src="./src/assets/images/ss/editProfile.jpg" width="200">
-</kbd>
-
+## Contributors
+[Bani Sholih](https://github.com/banisholih23)
 
 
