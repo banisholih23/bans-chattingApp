@@ -53,19 +53,31 @@
 
 
 <kbd>
-<img src="./screenshot/splash.jpg" width="200">
+<img src="./src/assets/images/ss/splash.jpg" width="200">
 </kbd>
 
 <kbd>
-<img src="./screenshot/login.jpg" width="200">
+<img src="./src/assets/images/ss/login.jpg" width="200">
 </kbd>
 
 <kbd>
-<img src="./screenshot/map.jpg" width="200">
+<img src="./src/assets/images/ss/home.jpg" width="200">
 </kbd>
 
 <kbd>
-<img src="./screenshot/chat.jpg" width="200">
+<img src="./src/assets/images/ss/chat.jpg" width="200">
+</kbd>
+
+<kbd>
+<img src="./src/assets/images/ss/maps.jpg" width="200">
+</kbd>
+
+<kbd>
+<img src="./src/assets/images/ss/profile.jpg" width="200">
+</kbd>
+
+<kbd>
+<img src="./src/assets/images/ss/editProfile.jpg" width="200">
 </kbd>
 
 
